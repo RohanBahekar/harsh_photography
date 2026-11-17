@@ -5,11 +5,7 @@ if (menuButton && navLinks) {
   menuButton.addEventListener('click', () => navLinks.classList.toggle('show'));
 }
 
-const emailJsConfig = {
-  serviceId: 'service_iezii6p',
-  templateId: 'template_uz3f1by',
-  publicKey: 't1Q4k-9eav8CdgHTq'
-};
+const emailJsConfig = window.emailJsConfig;
 
 document.querySelectorAll('[data-emailjs-form]').forEach(form => {
   form.addEventListener('submit', async event => {
@@ -28,8 +24,13 @@ document.querySelectorAll('[data-emailjs-form]').forEach(form => {
       return;
     }
 
+    if (!emailJsConfig || !emailJsConfig.serviceId || !emailJsConfig.templateId || !emailJsConfig.publicKey) {
+      notice.textContent = 'Email setup is incomplete. Configure the .env file and run npm run build.';
+      return;
+    }
+
     if (emailJsConfig.templateId === emailJsConfig.serviceId) {
-      notice.textContent = 'Email setup is incomplete: replace the Template ID in script.js with the Template ID from your EmailJS dashboard.';
+      notice.textContent = 'Email setup is incomplete: check the EmailJS Template ID in your .env file.';
       return;
     }
 
